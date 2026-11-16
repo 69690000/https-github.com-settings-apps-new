@@ -1,16 +1,26 @@
-# Introduction to GitHub
+# CloverPool
 
-<img src="https://octodex.github.com/images/Professortocat_v2.png" align="right" height="200px" />
+Multi-currency mining pool web app: browse every coin pool, register an account, manage workers and
+sub-accounts, and track daily earnings and payouts.
 
-Hey @69690000!
+- **Frontend** — React + Vite (`src/`), dark pool dashboard with live-feed styling.
+- **API** — Express + SQLite (`server/`), cookie sessions, scrypt password hashing.
 
-Mona here. I'm done preparing your exercise. Hope you enjoy! 💚
+## Coin pools
 
-Remember, it's self-paced so feel free to take a break! ☕️
+BTC, BCH, BSV, LTC, DOGE, ETC, ZIL, ETHW, ETHF, KAS, DCR, CKB, DASH, ZEC, GRIN, ELA and NMC, each with
+algorithm, payment model (FPPS/PPLNS), fee, payout threshold, stratum servers and block history.
 
-[![](https://img.shields.io/badge/Go%20to%20Exercise-%E2%86%92-1f883d?style=for-the-badge&logo=github&labelColor=197935)](https://github.com/69690000/https-github.com-settings-apps-new/issues/1)
+## Run locally
 
----
+```bash
+docker compose -f docker-compose.base44.yml up -d --build
+```
 
-&copy; 2025 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
+Web: http://localhost:3000 — API: http://localhost:8000/api.
 
+## Demo account
+
+`demo@cloverpool.demo` / `demo1234` — pre-loaded with sub-accounts, workers, payouts and payout addresses.
+
+> Pool statistics, hashrates and balances in this environment are simulated demo data.

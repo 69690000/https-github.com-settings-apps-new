@@ -1,0 +1,68 @@
+# Development stack for the Base44 sandbox. Both services run from the mounted
+# source with live reload; no prebuilt application image is used.
+name: cloverpool
+
+services:
+  api:
+    image: node:22
+    working_dir: /app/server
+    command: ["sh", "-ec", "CI=true npm install --no-audit --no-fund && exec npm start"]
+    volumes:
+      - ./:/app
+      - clover-data:/data
+    environment:
+      - PORT=8000
+      - DB_PATH=/data/cloverpool.db
+      - BASE44_PREVIEW_MODE
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 90s
+    restart: on-failure
+    labels:
+      base44.project: "CloverPool API"
+      base44.kind: "api"
+
+  web:
+    image: node:22
+    working_dir: /app
+    command: ["sh", "-ec", "CI=true npm install --no-audit --no-fund && exec npm run dev"]
+    volumes:
+      - ./:/app
+    environment:
+      - API_PROXY_TARGET=http://api:8000
+      - BASE44_PREVIEW_MODE
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS
+    ports:
+      - "3000:5173"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:5173/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 90s
+    restart: on-failure
+    labels:
+      base44.project: "CloverPool"
+      base44.kind: "web"
+      base44.port: "3000"
+
+volumes:
+  clover-data:
