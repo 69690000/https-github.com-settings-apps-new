@@ -25,6 +25,17 @@
 *.log
 *.sql
 *.sqlite
+*.db
+*.db-wal
+*.db-shm
+
+# Node / app #
+##############
+node_modules/
+dist/
+data/
+.env
+.env.local
 
 # OS generated files #
 ######################
